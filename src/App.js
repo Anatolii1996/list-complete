@@ -5,6 +5,8 @@ import './App.css';
 function App() {
   const [newItem, setNewItem] = useState("");
   const [items, setItems] = useState([]);
+  const [showEdit, setShowEdit] = useState(-1);
+  const [updatedText, setUpdatedText] = useState("");
 
   const addItem = () => {
     if (!newItem) {
@@ -22,6 +24,17 @@ function App() {
     const newArr = items.filter((item) => item.id !== id);
     setItems(newArr);
   };
+  const editText = (id, newText) => {
+    const currentItem = items.filter((item) => item.id === id);
+    const newItem = {
+      id: currentItem.id,
+      value: newText,
+    }
+    deleteItem(id);
+    setItems((oldList) => [...oldList, newItem]);
+    setUpdatedText("");
+    setShowEdit(-1);
+  }
 
   return (
     <div className='app'>
@@ -37,14 +50,26 @@ function App() {
         {
           items.map((item) => {
             return (
-              <li key={item.id}>
-                <span>{item.value}</span>
-                <button onClick={() => {
-                  deleteItem(item.id);
-                }}
-                >
-                  X</button>
-              </li>
+              <div key={item.id}>
+                <li onClick={()=>{
+                  setShowEdit(item.id);
+                }}>
+                  <span>{item.value}</span>
+                  <button onClick={() => {
+                    deleteItem(item.id);
+                  }}
+                  >
+                    X</button>
+                </li>
+                {showEdit == item.id && (<div>
+                  <input type="text" value={updatedText} onChange={(e) => {
+                    setUpdatedText(e.target.value);
+                  }} />
+                  <button onClick={() => {
+                    editText(item.id, updatedText)
+                  }}>Update</button>
+                </div>)}
+              </div>
             )
 
           })
