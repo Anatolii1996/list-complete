@@ -59,7 +59,7 @@ function App() {
                     deleteItem(item.id);
                   }}
                   >
-                    X</button>
+                    ❌</button>
                 </li>
                 {showEdit == item.id && (<div>
                   <input type="text" value={updatedText} onChange={(e) => {
